@@ -1,0 +1,55 @@
+﻿using Microsoft.SharePoint;
+using Northwind.Common.Extensions;
+using Northwind.Common.Lists.Base;
+
+namespace Northwind.Common.Lists
+{
+	public class Categories : IEnsurableList
+	{
+		private const string LIST_TITLE = "Categories";
+
+		public void Ensure(SPWeb web)
+		{
+			SPList list = web.Lists.Ensure(SPListTemplateType.GenericList, LIST_TITLE);
+
+			EnsureFields(list);
+
+			EnsureFieldOrder(list);
+		}
+
+		private void EnsureFields(SPList list)
+		{
+			SPFieldText categoryName = list.Fields[SPBuiltInFieldId.Title] as SPFieldText;
+			categoryName.Title = "Category Name";
+			categoryName.MaxLength = 15;
+			categoryName.Required = true;
+			categoryName.Update();
+
+			SPFieldMultiLineText description = list.Fields.Ensure<SPFieldMultiLineText>("Description");
+
+			SPFieldUrl picture = list.Fields.Ensure<SPFieldUrl>("Picture");
+			picture.DisplayFormat = SPUrlFieldFormatType.Image;
+			picture.Update();
+		}
+
+		private void EnsureFieldOrder(SPList list)
+		{
+			string[] fieldOrder =
+			{
+				"ID",
+				"Category Name",
+				"Description",
+				"Picture"
+			};
+
+			list.Fields.Reorder(fieldOrder);
+
+			list.Views.EnsureDefaultView(fieldOrder);
+		}
+
+		public void TearDown(SPWeb web)
+		{
+			web.Lists.Delete(LIST_TITLE);
+		}
+	}
+}
