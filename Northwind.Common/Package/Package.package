@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="1c522514-1cc4-4508-9b04-08988ee33152" solutionId="1c522514-1cc4-4508-9b04-08988ee33152" resetWebServer="false" name="Northwind.Common" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <assemblies>
+    <customAssembly location="Camlex.NET.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="..\SolutionItems\Assemblies\Camlex.NET.dll" />
+  </assemblies>
   <features>
     <featureReference itemId="e7d653f5-cb8b-46f0-a7c7-0c8c823dad58" />
   </features>

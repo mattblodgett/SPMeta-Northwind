@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,7 +15,7 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
@@ -78,39 +79,37 @@ namespace Northwind.Common.Lists
 			photo.DisplayFormat = SPUrlFieldFormatType.Image;
 			photo.Update();
 
-			SPFieldMultiLineText notes = list.Fields.Ensure<SPFieldMultiLineText>("Notes");
+			list.Fields.Ensure<SPFieldMultiLineText>("Notes");
+
+			SPFieldLookup territories = list.Fields.EnsureLookup("Territories", "Territories");
+			territories.AllowMultipleValues = true;
+			territories.Update();
+
+			SPFieldCalculated displayName = list.Fields.Ensure<SPFieldCalculated>("Display Name");
+			displayName.Formula = "=[First Name]&\" \"&[Last Name]";
+			displayName.Update();
 
 			SPFieldLookup reportsTo = list.Fields.EnsureLookup(LIST_TITLE, "Reports To");
-			reportsTo.LookupField = lastName.InternalName;
+			reportsTo.LookupField = displayName.InternalName;
 			reportsTo.Update();
 		}
 
-		private void EnsureFieldOrder(SPList list)
+		private void EnsureViews(SPList list)
 		{
-			string[] fieldOrder =
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
 			{
-				"ID",
-				"Last Name",
 				"First Name",
+				"Last Name",
 				"Title",
-				"Title of Courtesy",
-				"Birth Date",
-				"Hire Date",
-				"Address",
+				"Reports To",
 				"City",
 				"Region",
-				"Postal Code",
-				"Country",
-				"Home Phone",
-				"Extension",
-				"Photo",
-				"Notes",
-				"Reports To"
-			};
+				"Country"
+			});
 
-			list.Fields.Reorder(fieldOrder);
-
-			list.Views.EnsureDefaultView(fieldOrder);
+			string lastNameInternal = list.Fields["Last Name"].InternalName;
+			defaultView.Query = Camlex.Query().OrderBy(x => x[lastNameInternal]).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)

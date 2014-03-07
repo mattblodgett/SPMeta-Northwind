@@ -40,6 +40,10 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Camlex.NET, Version=3.4.0.0, Culture=neutral, PublicKeyToken=831792d54d5285b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SolutionItems\Assemblies\Camlex.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -60,7 +64,6 @@
     <Compile Include="Lists\CustomerDemographics.cs" />
     <Compile Include="Lists\Customers.cs" />
     <Compile Include="Lists\Employees.cs" />
-    <Compile Include="Lists\EmployeeTerritories.cs" />
     <Compile Include="Lists\OrderDetails.cs" />
     <Compile Include="Lists\Orders.cs" />
     <Compile Include="Lists\Products.cs" />

@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,7 +15,7 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
@@ -30,7 +31,7 @@ namespace Northwind.Common.Lists
 			supplier.LookupField = suppliers.Fields["Company Name"].InternalName;
 			supplier.Update();
 
-			SPFieldLookup category = list.Fields.EnsureLookup("Categories", "Category");
+			list.Fields.EnsureLookup("Categories", "Category");
 
 			SPFieldText quantityPerUnit = list.Fields.Ensure<SPFieldText>("Quantity Per Unit");
 			quantityPerUnit.MaxLength = 20;
@@ -61,24 +62,20 @@ namespace Northwind.Common.Lists
 			discontinued.Update();
 		}
 
-		private void EnsureFieldOrder(SPList list)
+		private void EnsureViews(SPList list)
 		{
-			string[] fieldOrder =
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
 			{
-				"Product Name",
+				"LinkTitle",
 				"Supplier",
 				"Category",
-				"Quantity Per Unit",
 				"Unit Price",
 				"Units in Stock",
-				"Units on Order",
-				"Reorder Level",
 				"Discontinued"
-			};
+			});
 
-			list.Fields.Reorder(fieldOrder);
-
-			list.Views.EnsureDefaultView(fieldOrder);
+			defaultView.Query = Camlex.Query().OrderBy(x => x["Title"]).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)

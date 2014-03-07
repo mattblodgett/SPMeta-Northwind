@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,7 +15,7 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
@@ -25,26 +26,30 @@ namespace Northwind.Common.Lists
 			categoryName.Required = true;
 			categoryName.Update();
 
-			SPFieldMultiLineText description = list.Fields.Ensure<SPFieldMultiLineText>("Description");
+			list.Fields.Ensure<SPFieldMultiLineText>("Description");
 
 			SPFieldUrl picture = list.Fields.Ensure<SPFieldUrl>("Picture");
 			picture.DisplayFormat = SPUrlFieldFormatType.Image;
 			picture.Update();
-		}
 
-		private void EnsureFieldOrder(SPList list)
-		{
-			string[] fieldOrder =
+			list.Fields.Reorder(new[]
 			{
-				"ID",
 				"Category Name",
 				"Description",
 				"Picture"
-			};
+			});
+		}
 
-			list.Fields.Reorder(fieldOrder);
+		private void EnsureViews(SPList list)
+		{
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
+			{
+				"LinkTitle",
+				"Description"
+			});
 
-			list.Views.EnsureDefaultView(fieldOrder);
+			defaultView.Query = Camlex.Query().OrderBy(x => x["Title"]).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)

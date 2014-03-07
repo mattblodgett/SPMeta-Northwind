@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,7 +15,7 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
@@ -28,7 +29,7 @@ namespace Northwind.Common.Lists
 
 			SPList employees = list.Lists["Employees"];
 			SPFieldLookup employee = list.Fields.EnsureLookup(employees.Title, "Employee");
-			employee.LookupField = employees.Fields["Last Name"].InternalName;
+			employee.LookupField = employees.Fields["Display Name"].InternalName;
 			employee.Update();
 
 			SPFieldDateTime orderDate = list.Fields.Ensure<SPFieldDateTime>("Order Date");
@@ -78,29 +79,19 @@ namespace Northwind.Common.Lists
 			shipCountry.Update();
 		}
 
-		private void EnsureFieldOrder(SPList list)
+		private void EnsureViews(SPList list)
 		{
-			string[] fieldOrder =
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
 			{
-				"ID",
-				"Customer",
-				"Employee",
 				"Order Date",
+				"Customer",
 				"Required Date",
-				"Shipped Date",
-				"Ship Via",
-				"Freight",
-				"Ship Name",
-				"Ship Address",
-				"Ship City",
-				"Ship Region",
-				"Ship Postal Code",
-				"Ship Country"
-			};
+				"Shipped Date"
+			});
 
-			list.Fields.Reorder(fieldOrder);
-
-			list.Views.EnsureDefaultView(fieldOrder);
+			string orderDateInternal = list.Fields["Order Date"].InternalName;
+			defaultView.Query = Camlex.Query().OrderBy(x => x[orderDateInternal] as Camlex.Desc).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)

@@ -3,6 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Common", "Northwind.Common\Northwind.Common.csproj", "{55256C53-31A7-44FD-AE37-2F38103B01D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{4218530A-08F5-40C6-913F-9856E04CD708}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{0EBC4328-BF8A-4A88-BF25-BD235EE25DED}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\Scripts\Down.ps1 = SolutionItems\Scripts\Down.ps1
+		SolutionItems\Scripts\FeatureUtils.ps1 = SolutionItems\Scripts\FeatureUtils.ps1
+		SolutionItems\Scripts\LoggingUtils.ps1 = SolutionItems\Scripts\LoggingUtils.ps1
+		SolutionItems\Scripts\ServiceUtils.ps1 = SolutionItems\Scripts\ServiceUtils.ps1
+		SolutionItems\Scripts\SolutionUtils.ps1 = SolutionItems\Scripts\SolutionUtils.ps1
+		SolutionItems\Scripts\Up.ps1 = SolutionItems\Scripts\Up.ps1
+		SolutionItems\Scripts\update.bat = SolutionItems\Scripts\update.bat
+		SolutionItems\Scripts\WebAppUtils.ps1 = SolutionItems\Scripts\WebAppUtils.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{084097CB-9A73-4CFB-A9E1-872597FEAC69}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\Assemblies\Camlex.NET.dll = SolutionItems\Assemblies\Camlex.NET.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +37,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0EBC4328-BF8A-4A88-BF25-BD235EE25DED} = {4218530A-08F5-40C6-913F-9856E04CD708}
+		{084097CB-9A73-4CFB-A9E1-872597FEAC69} = {4218530A-08F5-40C6-913F-9856E04CD708}
 	EndGlobalSection
 EndGlobal

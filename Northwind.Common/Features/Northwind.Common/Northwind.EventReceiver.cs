@@ -22,8 +22,7 @@ namespace Northwind.Common.Features.Northwind.Common
 			new Products(),
 			new Regions(),
 			new Territories(),
-			new OrderDetails(),
-			new EmployeeTerritories()
+			new OrderDetails()
 		});
 
 		public override void FeatureActivated(SPFeatureReceiverProperties properties)

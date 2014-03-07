@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,25 +15,36 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
 		{
-			list.Fields.Ensure<SPFieldMultiLineText>("Customer Desc");
+			SPField demographic = list.Fields[SPBuiltInFieldId.Title];
+			demographic.Title = "Demographic";
+			demographic.Indexed = true;
+			demographic.EnforceUniqueValues = true;
+			demographic.Update();
+
+			list.Fields.Ensure<SPFieldMultiLineText>("Description");
+
+			list.Fields.Reorder(new[]
+			{
+				"Demographic",
+				"Description"
+			});
 		}
 
-		private void EnsureFieldOrder(SPList list)
+		private void EnsureViews(SPList list)
 		{
-			string[] fieldOrder =
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
 			{
-				"ID",
-				"Customer Desc"
-			};
+				"LinkTitle",
+				"Description"
+			});
 
-			list.Fields.Reorder(fieldOrder);
-
-			list.Views.EnsureDefaultView(fieldOrder);
+			defaultView.Query = Camlex.Query().OrderBy(x => x["Title"]).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)

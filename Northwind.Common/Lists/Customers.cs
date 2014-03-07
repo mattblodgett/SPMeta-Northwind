@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,20 +15,11 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
 		{
-			SPFieldText customerId = list.Fields.Ensure<SPFieldText>("Customer ID");
-			customerId.Required = true;
-			customerId.Indexed = true;
-			customerId.EnforceUniqueValues = true;
-			customerId.MaxLength = 5;
-			customerId.ValidationFormula = "=LEN([Customer ID])=5";
-			customerId.ValidationMessage = "Customer ID must be exactly 5 characters.";
-			customerId.Update();
-
 			SPFieldText companyName = list.Fields[SPBuiltInFieldId.Title] as SPFieldText;
 			companyName.Title = "Company Name";
 			companyName.Required = true;
@@ -70,32 +62,25 @@ namespace Northwind.Common.Lists
 			fax.MaxLength = 24;
 			fax.Update();
 
-			SPFieldLookup customerDemographics = list.Fields.EnsureLookup("Customer Demographics", "Customer Demographics");
+			SPFieldLookup customerDemographics = list.Fields.EnsureLookup("Customer Demographics", "Demographics");
 			customerDemographics.AllowMultipleValues = true;
 			customerDemographics.Update();
 		}
 
-		private void EnsureFieldOrder(SPList list)
+		private void EnsureViews(SPList list)
 		{
-			string[] fieldOrder =
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
 			{
-				"Customer ID",
-				"Company Name",
-				"Contact Name",
-				"Contact Title",
-				"Address",
+				"LinkTitle",
 				"City",
 				"Region",
-				"Postal Code",
 				"Country",
 				"Phone",
-				"Fax",
-				"Customer Demographics"
-			};
+				"Demographics"
+			});
 
-			list.Fields.Reorder(fieldOrder);
-
-			list.Views.EnsureDefaultView(fieldOrder);
+			defaultView.Query = Camlex.Query().OrderBy(x => x["Title"]).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)

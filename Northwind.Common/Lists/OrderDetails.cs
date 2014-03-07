@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,7 +15,7 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
@@ -23,12 +24,12 @@ namespace Northwind.Common.Lists
 
 			// We can't use the title 'Order' as a field with that title already
 			// exists on every SharePoint list
-			SPFieldLookup order = list.Fields.EnsureLookup("Orders", "Order ID");
-			order.LookupField = "ID";
-			order.Required = true;
-			order.Indexed = true;
-			order.RelationshipDeleteBehavior = SPRelationshipDeleteBehavior.Cascade;
-			order.Update();
+			SPFieldLookup orderId = list.Fields.EnsureLookup("Orders", "Order ID");
+			orderId.LookupField = "ID";
+			orderId.Required = true;
+			orderId.Indexed = true;
+			orderId.RelationshipDeleteBehavior = SPRelationshipDeleteBehavior.Cascade;
+			orderId.Update();
 
 			SPFieldLookup product = list.Fields.EnsureLookup("Products", "Product");
 			product.Required = true;
@@ -51,20 +52,20 @@ namespace Northwind.Common.Lists
 			discount.Update();
 		}
 
-		private void EnsureFieldOrder(SPList list)
+		private void EnsureViews(SPList list)
 		{
-			string[] fieldOrder =
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
 			{
 				"Order ID",
 				"Product",
-				"Unit Price",
 				"Quantity",
+				"Unit Price",
 				"Discount"
-			};
+			});
 
-			list.Fields.Reorder(fieldOrder);
-
-			list.Views.EnsureDefaultView(fieldOrder);
+			string orderIdInternal = list.Fields["Order ID"].InternalName;
+			defaultView.Query = Camlex.Query().OrderBy(x => x[orderIdInternal]).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)

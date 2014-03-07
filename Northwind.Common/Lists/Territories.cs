@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint;
+﻿using CamlexNET;
+using Microsoft.SharePoint;
 using Northwind.Common.Extensions;
 using Northwind.Common.Lists.Base;
 
@@ -14,34 +15,33 @@ namespace Northwind.Common.Lists
 
 			EnsureFields(list);
 
-			EnsureFieldOrder(list);
+			EnsureViews(list);
 		}
 
 		private void EnsureFields(SPList list)
 		{
-			SPFieldText territoryDescription = list.Fields[SPBuiltInFieldId.Title] as SPFieldText;
-			territoryDescription.Title = "Territory Description";
-			territoryDescription.MaxLength = 50;
-			territoryDescription.Required = true;
-			territoryDescription.Update();
+			SPFieldText territoryName = list.Fields[SPBuiltInFieldId.Title] as SPFieldText;
+			territoryName.Title = "Territory Name";
+			territoryName.Indexed = true;
+			territoryName.EnforceUniqueValues = true;
+			territoryName.Required = true;
+			territoryName.Update();
 
 			SPFieldLookup region = list.Fields.EnsureLookup("Regions", "Region");
 			region.Required = true;
 			region.Update();
 		}
 
-		private void EnsureFieldOrder(SPList list)
+		private void EnsureViews(SPList list)
 		{
-			string[] fieldOrder =
+			SPView defaultView = list.Views.EnsureDefaultView(new[]
 			{
-				"ID",
-				"Territory Description",
+				"LinkTitle",
 				"Region"
-			};
+			});
 
-			list.Fields.Reorder(fieldOrder);
-
-			list.Views.EnsureDefaultView(fieldOrder);
+			defaultView.Query = Camlex.Query().OrderBy(x => x["Title"]).ToString();
+			defaultView.Update();
 		}
 
 		public void TearDown(SPWeb web)
