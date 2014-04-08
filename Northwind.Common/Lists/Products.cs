@@ -76,6 +76,18 @@ namespace Northwind.Common.Lists
 
 			defaultView.Query = Camlex.Query().OrderBy(x => x["Title"]).ToString();
 			defaultView.Update();
+
+
+			SPView activeProductsByCategory = list.Views.EnsureView("Active Products By Category", new[]
+			{
+				"LinkTitle",
+				"Supplier",
+				"Unit Price",
+				"Units in Stock"
+			});
+
+			activeProductsByCategory.Query = Camlex.Query().Where(x => (bool)x["Discontinued"] == false).OrderBy(x => x["Title"]).GroupBy(x => x["Category"], false, 30).ToString();
+			activeProductsByCategory.Update();
 		}
 
 		public void TearDown(SPWeb web)

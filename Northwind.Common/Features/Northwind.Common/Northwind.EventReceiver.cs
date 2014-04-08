@@ -32,7 +32,7 @@ namespace Northwind.Common.Features.Northwind.Common
 			Ensure(site.RootWeb);
 		}
 
-		public override void FeatureUpgrading(SPFeatureReceiverProperties properties, string upgradeActionName, System.Collections.Generic.IDictionary<string, string> parameters)
+		public override void FeatureUpgrading(SPFeatureReceiverProperties properties, string upgradeActionName, IDictionary<string, string> parameters)
 		{
 			SPSite site = properties.Feature.Parent as SPSite;
 
