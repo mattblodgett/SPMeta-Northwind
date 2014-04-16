@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Module Name="HRPages" Path="HRPages" Url="hr">
+    <File Path="Default.aspx" Url="Default.aspx" Type="GhostableInLibrary" />
+    <File Path="HRPage2.aspx" Url="HRPage2.aspx" Type="GhostableInLibrary" />
+    <File Path="HRPage3.aspx" Url="HRPage3.aspx" Type="GhostableInLibrary" />
+  </Module>
+</Elements>

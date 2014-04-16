@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.Module" DefaultFile="Elements.xml" SupportedTrustLevels="All" SupportedDeploymentScopes="Web, Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="HRPages\" Type="ElementManifest" />
+    <ProjectItemFile Source="Default.aspx" Target="HRPages\" Type="ElementFile" />
+    <ProjectItemFile Source="HRPage2.aspx" Target="HRPages\" Type="ElementFile" />
+    <ProjectItemFile Source="HRPage3.aspx" Target="HRPages\" Type="ElementFile" />
+  </Files>
+</ProjectItem>

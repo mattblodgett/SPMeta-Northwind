@@ -14,14 +14,14 @@ namespace Northwind.Common.Features.Northwind.Common
 		{
 			new CustomerDemographics(),
 			new Customers(),
+			new Regions(),
+			new Territories(),
 			new Employees(),
 			new Shippers(),
 			new Orders(),
 			new Suppliers(),
 			new Categories(),
 			new Products(),
-			new Regions(),
-			new Territories(),
 			new OrderDetails()
 		});
 

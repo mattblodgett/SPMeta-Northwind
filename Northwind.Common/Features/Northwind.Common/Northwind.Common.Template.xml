@@ -2,5 +2,9 @@
 <Feature xmlns="http://schemas.microsoft.com/sharepoint/">
   <UpgradeActions>
     <CustomUpgradeAction Name="Upgrade" />
+    <ApplyElementManifests>
+      <ElementManifest Location="HR Pages\Elements.xml" />
+      <ElementManifest Location="HRPages\Elements.xml" />
+    </ApplyElementManifests>
   </UpgradeActions>
 </Feature>

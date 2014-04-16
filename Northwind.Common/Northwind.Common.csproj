@@ -78,7 +78,13 @@
     <None Include="Features\Northwind.Common\Northwind.Common.feature">
       <FeatureId>{e7d653f5-cb8b-46f0-a7c7-0c8c823dad58}</FeatureId>
     </None>
+    <None Include="HRPages\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{6e2ea447-fe22-4195-978f-72a65dcdb052}</SharePointProjectItemId>
+    </None>
     <None Include="key.snk" />
+    <None Include="Lists\HR Pages\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{bb8f95c4-7377-4ac8-a1e5-b3b40931f2a8}</SharePointProjectItemId>
+    </None>
     <None Include="Package\Package.package">
       <PackageId>{1c522514-1cc4-4508-9b04-08988ee33152}</PackageId>
     </None>
@@ -91,6 +97,13 @@
     <Content Include="Features\Northwind.Common\Northwind.Common.Template.xml">
       <DependentUpon>Northwind.Common.feature</DependentUpon>
     </Content>
+    <Content Include="HRPages\Default.aspx" />
+    <Content Include="HRPages\Elements.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="HRPages\HRPage2.aspx" />
+    <Content Include="HRPages\HRPage3.aspx" />
+    <Content Include="Lists\HR Pages\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
